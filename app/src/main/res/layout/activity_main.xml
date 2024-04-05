@@ -1,32 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <EditText
-        android:id="@+id/emailEditText"
+    android:background="#c56752"
+    tools:context=".MainActivity"
+    tools:ignore="ExtraText">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:layout_margin="16dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:layout_below="@id/emailEditText"
-        android:layout_margin="16dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="288dp"
+                android:src="@drawable/logo"
+                android:visibility="visible" />
 
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:layout_below="@id/passwordEditText"
-        android:layout_margin="16dp"/>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="527dp"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/round_border"
+            android:orientation="vertical"
+            android:padding="20dp">
+            <EditText
+                android:id="@+id/emailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/round_border03"
+                android:hint="Email"
+                android:textColorHint="#3b3b3b"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:textSize="20dp" />
+            <EditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/round_border03"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColorHint="#3b3b3b"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:textSize="20dp" />
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="#5bb4a9"
+                android:padding="20dp"
+                android:text="Login"
+                android:textSize="35sp" />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+    </LinearLayout>
 </RelativeLayout>
