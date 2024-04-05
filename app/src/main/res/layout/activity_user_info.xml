@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#c56752">
+
+    <TextView
+        android:id="@+id/textViewWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewWelcome"
+        android:layout_marginTop="30dp"
+        android:text="ID :"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewNom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewID"
+        android:layout_marginTop="16dp"
+        android:text="Nom :"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewPrenom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewNom"
+        android:layout_marginTop="16dp"
+        android:text="Prénom :"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewPrenom"
+        android:layout_marginTop="16dp"
+        android:text="Email :"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewEmail"
+        android:layout_marginTop="16dp"
+        android:text="Role :"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewToken"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewRole"
+        android:layout_marginTop="16dp"
+        android:text="Token :"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewComptesRendus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewToken"
+        android:layout_marginTop="30dp"
+        android:maxLines="10"
+        android:padding="8dp"
+        android:scrollbars="vertical"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_below="@id/textViewComptesRendus"
+        android:layout_marginTop="16dp">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/Ajouter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#5bb4a9"
+            android:padding="8dp"
+            android:text="Ajouter"
+            android:textColor="#ffffff" />
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/Deconnexion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#5bb4a9"
+            android:padding="8dp"
+            android:text="Deconnexion"
+            android:textColor="#ffffff" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</RelativeLayout>
