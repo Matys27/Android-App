@@ -10,6 +10,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     RequestQueue requestQueue;
 
     private static final String LOGIN_URL = "https://gsbcr.alwaysdata.net/Api/loginAPI.php";
+    private static final String CR_URL = "https://gsbcr.alwaysdata.net/Api/AfficheCRApi.php";
+    private static final String CR_LIST = "cr_list";
     private static final String STATUS = "status";
     private static final int SUCCESS_STATUS = 200;
 

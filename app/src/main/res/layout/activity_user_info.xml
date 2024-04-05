@@ -9,97 +9,94 @@
         android:id="@+id/textViewWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:textSize="35sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="16dp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewWelcome"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:text="ID :"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginStart="16dp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewNom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewID"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Nom :"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginStart="16dp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewPrenom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewNom"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Prénom :"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginStart="16dp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewPrenom"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Email :"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginStart="16dp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewRole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewEmail"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Role :"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginStart="16dp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewToken"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewRole"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Token :"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginStart="16dp"/>
+        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textViewComptesRendus"
+    <ListView
+        android:id="@+id/listViewComptesRendus"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewToken"
-        android:layout_marginTop="30dp"
-        android:maxLines="10"
-        android:padding="8dp"
-        android:scrollbars="vertical"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"/>
+        android:layout_marginTop="16dp"
+        android:layout_height="250dp"
+        android:background="@drawable/list_item_background"
+        android:nestedScrollingEnabled="true"
+        android:layout_below="@id/textViewToken"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_below="@id/listViewComptesRendus"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:layout_below="@id/textViewComptesRendus"
-        android:layout_marginTop="16dp">
+        android:orientation="horizontal">
 
         <Space
             android:layout_width="0dp"
