@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#c56752">
+
+
+    <LinearLayout
+        android:layout_width="395dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="8dp"
+        android:layout_marginTop="32dp"
+        android:weightSum="1"
+        tools:ignore="MissingConstraints">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/second_bg">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:orientation="vertical"
+                android:paddingLeft="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:text="Date de Visite:"
+                    android:textSize="24dp" />
+
+                <EditText
+                    android:id="@+id/editTextDateVisite"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:hint="jj/mm/aaaa"
+                    android:inputType="date"
+                    android:textColorHint="#dcc56752"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/date_visite"
+                    android:layout_marginTop="7dp"
+                    android:text="Date de Contre-Visite:"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/editTextDateContreVisite"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:hint="jj/mm/aaaa"
+                    android:inputType="date"
+                    android:textColorHint="#dcc56752"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="Motif de la Visite:"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/editTextMotifVisite"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border_stroke0" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Remarque:"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/editTextRemarque"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border_stroke0"
+                    android:padding="7dp"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Nom du practicien:"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/editTextPracticien"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textColor="#dcc56752"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Produit:"
+                    android:textSize="20dp" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxRefus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Refus"
+                    android:textSize="15dp"
+                    android:textColor="#dcc56752"/>
+                <EditText
+                    android:id="@+id/editTextProduit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-37dp"
+                    android:hint="Produit prescrit..."
+                    android:layout_marginLeft="100dp"
+                    android:textSize="15dp"
+                    android:textColorHint="#dcc56752"
+                    />
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Quantité distribuée:"
+                    android:textSize="20dp"/>
+                <EditText
+                    android:id="@+id/editTextQuantite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/buttonEnregistrer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Enregistrer"
+                    android:backgroundTint="#5bb4a9"
+                    android:textColor="#FFF"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

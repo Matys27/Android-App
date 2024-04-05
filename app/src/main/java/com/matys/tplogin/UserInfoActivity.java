@@ -3,7 +3,9 @@ package com.matys.tplogin;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,6 +41,16 @@ public class UserInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
+
+        Button ajouterButton = findViewById(R.id.Ajouter);
+        ajouterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Intent to navigate to Add_CR activity
+                Intent intent = new Intent(UserInfoActivity.this, Add_CR.class);
+                startActivity(intent);
+            }
+        });
 
         Intent intent = getIntent();
 
