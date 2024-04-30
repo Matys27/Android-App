@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -42,91 +43,75 @@ public class UserInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
 
+        SharedPreferencesManager prefsManager = new SharedPreferencesManager(getApplicationContext());
+        String userId = prefsManager.getUserId();
+        String tokenFromPrefs = prefsManager.getToken();
+
         Button ajouterButton = findViewById(R.id.Ajouter);
         ajouterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Intent to navigate to Add_CR activity
                 Intent intent = new Intent(UserInfoActivity.this, Add_CR.class);
                 startActivity(intent);
             }
         });
 
-        Intent intent = getIntent();
-
         textViewWelcome = findViewById(R.id.textViewWelcome);
-        textViewID = findViewById(R.id.textViewID);
         textViewNom = findViewById(R.id.textViewNom);
         textViewPrenom = findViewById(R.id.textViewPrenom);
         textViewEmail = findViewById(R.id.textViewEmail);
         textViewRole = findViewById(R.id.textViewRole);
-        textViewToken = findViewById(R.id.textViewToken);
         listViewComptesRendus = findViewById(R.id.listViewComptesRendus);
 
         comptesRendusList = new ArrayList<>();
 
-        // Récupération de l'objet JSON depuis l'intent
-        String message = getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE);
+        // Récupération des valeurs nom, prénom et email depuis l'intent
         try {
-            JSONObject jsonObject = new JSONObject(message);
+            JSONObject jsonObject = new JSONObject(getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
 
-            // Récupération des valeurs nom, prénom et email
-            String id = jsonObject.getString("id_user");
             String nom = jsonObject.getString("nom");
             String prenom = jsonObject.getString("prenom");
             String email = jsonObject.getString("email");
             String role = jsonObject.getString("role");
-            String token = jsonObject.getString("token");
+            String tokenFromIntent = jsonObject.getString("token");
 
-            // Affichage des valeurs
             textViewWelcome.setText(String.format("Bienvenue, %s !", nom));
-            textViewID.setText("id : " + id);
             textViewNom.setText("Nom : " + nom);
             textViewPrenom.setText("Prénom : " + prenom);
             textViewEmail.setText("Email : " + email);
             textViewRole.setText("Rôle : " + role);
-            textViewToken.setText("Token : " + token);
 
-            // Récupération des comptes-rendus
-            getComptesRendus(id);
+            getComptesRendus(userId);
 
         } catch (JSONException e) {
+            Toast.makeText(this, "Erreur lors du traitement des données JSON", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }
 
     private void getComptesRendus(String userId) {
-        // Construire l'URL de l'API
         String apiUrl = "https://gsbcr.alwaysdata.net/Api/AfficheCRApi.php";
-
-        // Créer les paramètres POST
         Map<String, String> params = new HashMap<>();
-        params.put("id", userId); // Envoyer l'ID utilisateur à l'API
+        params.put("id", userId);
 
-        // Créer une demande de chaîne (StringRequest) en utilisant Volley
         StringRequest stringRequest = new StringRequest(Request.Method.POST, apiUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // La réponse est retournée avec succès
-                        // Mettre à jour l'interface utilisateur avec les données récupérées
                         updateComptesRendus(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // Gérer les erreurs de requête
-                listViewComptesRendus.setTextDirection(Integer.parseInt("Erreur de réseau: " + error.getMessage()));
+                Toast.makeText(UserInfoActivity.this, "Erreur de réseau: " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Retourne les paramètres POST
                 return params;
             }
         };
 
-        // Ajouter la demande à la file d'attente de Volley
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
@@ -137,85 +122,56 @@ public class UserInfoActivity extends AppCompatActivity {
 
             if (status == 200) {
                 JSONArray comptesRendusArray = jsonResponse.getJSONArray("comptesRendus");
-
+                List<JSONObject> comptesRendusJsonList = new ArrayList<>();
                 if (comptesRendusArray.length() > 0) {
-                    // Créer une liste pour stocker les comptes-rendus
-                    List<JSONObject> comptesRendusList = new ArrayList<>();
                     for (int i = 0; i < comptesRendusArray.length(); i++) {
-                        // Ajouter chaque compte-rendu à la liste
-                        comptesRendusList.add(comptesRendusArray.getJSONObject(i));
+                        comptesRendusJsonList.add(comptesRendusArray.getJSONObject(i));
                     }
 
-                    // Trier les comptes-rendus par ordre de la date de visite
-                    Collections.sort(comptesRendusList, new Comparator<JSONObject>() {
+                    Collections.sort(comptesRendusJsonList, new Comparator<JSONObject>() {
                         @Override
                         public int compare(JSONObject cr1, JSONObject cr2) {
                             try {
-                                // Récupérer les dates de visite de chaque compte-rendu
-                                String date1 = cr1.getString("date_de_contre_visite");
-                                String date2 = cr2.getString("date_de_contre_visite");
-                                // Convertir les dates en objets de type Date pour les comparer
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                                Date parsedDate1 = format.parse(date1);
-                                Date parsedDate2 = format.parse(date2);
-                                // Comparer les dates et retourner le résultat
-                                return parsedDate1.compareTo(parsedDate2);
+                                Date date1 = format.parse(cr1.getString("date_de_contre_visite"));
+                                Date date2 = format.parse(cr2.getString("date_de_contre_visite"));
+                                return date1.compareTo(date2);
                             } catch (JSONException | ParseException e) {
                                 e.printStackTrace();
-                                // En cas d'erreur, retourner 0 pour indiquer que les deux objets sont égaux
                                 return 0;
                             }
                         }
                     });
 
-                    // Afficher les comptes-rendus triés
-                    List<String> comptesRendusTextList = new ArrayList<>();
-                    for (JSONObject compteRendu : comptesRendusList) {
-                        // Construction de la chaîne de texte avec les informations du compte-rendu
-                        String idCrCp = compteRendu.getString("id_cr_cp");
-                        String dateVisite = compteRendu.getString("date_de_la_visite");
-                        String dateContreVisite = compteRendu.getString("date_de_contre_visite");
-                        String motifVisite = compteRendu.getString("motif_de_la_visite");
-                        String nomPraticien = compteRendu.getString("nom_du_praticien");
-                        String produit = compteRendu.getString("produit");
-                        String refus = compteRendu.getString("refus");
-                        String quantiteDistribuee = compteRendu.getString("quantite_distribuee");
-                        String remarques = compteRendu.getString("remarques");
-
-                        String compteRenduText = "ID CR CP : " + idCrCp + "\n" + "Date de la visite : " + dateVisite + "\n" + "Date de contre-visite : " + dateContreVisite + "\n" + "Motif de la visite : " + motifVisite + "\n" + "Nom du praticien : " + nomPraticien + "\n" + "Produit : " + produit + "\n" + "Refus : " + refus + "\n" + "Quantité distribuée : " + quantiteDistribuee + "\n" + "Remarques : " + remarques + "\n\n";
-
-                        // Ajouter le compte-rendu trié à la liste
-                        comptesRendusTextList.add(compteRenduText);
+                    List<String> formattedComptesRendus = new ArrayList<>();
+                    for (JSONObject compteRendu : comptesRendusJsonList) {
+                        String displayText = String.format("ID CR CP : %s\nDate de la visite : %s\nDate de contre-visite : %s\nMotif de la visite : %s\nNom du praticien : %s\nProduit : %s\nRefus : %s\nQuantité distribuée : %s\nRemarques : %s\n\n",
+                                compteRendu.getString("id_cr_cp"),
+                                compteRendu.getString("date_de_la_visite"),
+                                compteRendu.getString("date_de_contre_visite"),
+                                compteRendu.getString("motif_de_la_visite"),
+                                compteRendu.getString("nom_du_praticien"),
+                                compteRendu.getString("produit"),
+                                compteRendu.getString("refus"),
+                                compteRendu.getString("quantite_distribuee"),
+                                compteRendu.getString("remarques"));
+                        formattedComptesRendus.add(displayText);
                     }
 
-                    // Créer un adaptateur pour le ListView
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, comptesRendusTextList);
-                    // Définir l'adaptateur pour le ListView
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, formattedComptesRendus);
                     listViewComptesRendus.setAdapter(adapter);
                 } else {
-                    // Aucun compte rendu trouvé pour cet utilisateur
                     comptesRendusList.add("Aucun compte rendu disponible pour cet utilisateur.");
-                    // Créer un adaptateur pour le ListView
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, comptesRendusList);
-                    // Définir l'adaptateur pour le ListView
                     listViewComptesRendus.setAdapter(adapter);
                 }
             } else {
-                // Le statut n'est pas 200, il y a une erreur dans la réponse
-                String message = jsonResponse.getString("message");
-                comptesRendusList.add(message);
-                // Créer un adaptateur pour le ListView
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, comptesRendusList);
-                // Définir l'adaptateur pour le ListView
-                listViewComptesRendus.setAdapter(adapter);
+                String errorMessage = jsonResponse.getString("message");
+                Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
             }
         } catch (JSONException e) {
+            Toast.makeText(this, "Erreur lors du traitement des données des comptes-rendus.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
-            comptesRendusList.add("Erreur lors du traitement des données des comptes-rendus.");
-            // Créer un adaptateur pour le ListView
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, comptesRendusList);
-            // Définir l'adaptateur pour le ListView
-            listViewComptesRendus.setAdapter(adapter);
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.matys.tplogin;
 
 import android.annotation.SuppressLint;
-import android.app.assist.AssistStructure;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,15 +15,45 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Add_CR extends AppCompatActivity {
 
-    EditText editTextDateVisite, editTextDateContreVisite, editTextMotifVisite, editTextRemarque, editTextPracticien, checkBoxRefus, editTextProduit, editTextQuantite ;
-    Button buttonEnregistrer;
+    EditText editTextDateVisite, editTextDateContreVisite, editTextMotifVisite, editTextRemarque, editTextPracticien, editTextProduit, editTextQuantite;
+    CheckBox checkBoxRefus;
+    Button buttonEnregistrer, buttonRetour;
+
+    public class SharedPreferencesManager {
+        private static final String SHARED_PREFS_NAME = "gsbcr_prefs";
+        private static final String USER_ID_KEY = "user_id";
+        private static final String TOKEN_KEY = "token";
+
+        private SharedPreferences sharedPreferences;
+
+        public SharedPreferencesManager(Context context) {
+            this.sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        }
+
+        public void saveUserId(String userId) {
+            sharedPreferences.edit().putString(USER_ID_KEY, userId).apply();
+        }
+
+        public String getUserId() {
+            return sharedPreferences.getString(USER_ID_KEY, null);
+        }
+
+        public void saveToken(String token) {
+            sharedPreferences.edit().putString(TOKEN_KEY, token).apply();
+        }
+
+        public String getToken() {
+            return sharedPreferences.getString(TOKEN_KEY, null);
+        }
+    }
+
 
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
@@ -35,71 +67,77 @@ public class Add_CR extends AppCompatActivity {
         editTextMotifVisite = findViewById(R.id.editTextMotifVisite);
         editTextRemarque = findViewById(R.id.editTextRemarque);
         editTextPracticien = findViewById(R.id.editTextPracticien);
-        CheckBox checkBoxRefus = findViewById(R.id.checkBoxRefus);
         editTextProduit = findViewById(R.id.editTextProduit);
         editTextQuantite = findViewById(R.id.editTextQuantite);
+        checkBoxRefus = findViewById(R.id.checkBoxRefus);
 
-        // Initialize Enregistrer button
+        // Initialize Buttons
         buttonEnregistrer = findViewById(R.id.buttonEnregistrer);
+        buttonRetour = findViewById(R.id.buttonRetour);
 
         // Set click listener for Enregistrer button
         buttonEnregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Call method to add compte rendu to the database
                 addCompteRendu();
+            }
+        });
+
+        // Set click listener for Retour button
+        buttonRetour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Add_CR.this, UserInfoActivity.class);
+                startActivity(intent);
             }
         });
     }
 
     private void addCompteRendu() {
-        // Get input values
-        String dateVisite = editTextDateVisite.getText().toString().trim();
-        String dateContreVisite = editTextDateContreVisite.getText().toString().trim();
-        String motifVisite = editTextMotifVisite.getText().toString().trim();
-        String remarque = editTextRemarque.getText().toString().trim();
-        String practicien = editTextPracticien.getText().toString().trim();
-        String produit = editTextProduit.getText().toString().trim();
-        String quantite = editTextQuantite.getText().toString().trim();
-        boolean isRefused = checkBoxRefus.isPressed();
+        SharedPreferencesManager prefsManager = new SharedPreferencesManager(getApplicationContext());
+        final String userId = prefsManager.getUserId();
 
-        // Prepare JSON object to send to the API
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("date_de_la_visite", dateVisite);
-            jsonObject.put("date_de_contre_visite", dateContreVisite);
-            jsonObject.put("motif_de_la_visite", motifVisite);
-            jsonObject.put("remarques", remarque);
-            jsonObject.put("nom_du_praticien", practicien);
-            jsonObject.put("refus", isRefused);
-            jsonObject.put("produit", produit);
-            jsonObject.put("quantite_distribuee", quantite);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        final String dateVisite = editTextDateVisite.getText().toString().trim();
+        final String dateContreVisite = editTextDateContreVisite.getText().toString().trim();
+        final String motifVisite = editTextMotifVisite.getText().toString().trim();
+        final String remarque = editTextRemarque.getText().toString().trim();
+        final String practicien = editTextPracticien.getText().toString().trim();
+        final String produit = editTextProduit.getText().toString().trim();
+        final String quantite = editTextQuantite.getText().toString().trim();
+        final boolean isRefused = checkBoxRefus.isChecked();
 
-        // Instantiate the RequestQueue
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://gsbcr.alwaysdata.net/Api/AjoutCRApi.php";
 
-        // Request a JSON response from the provided URL
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
-                new Response.Listener<JSONObject>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        // Handle response
+                    public void onResponse(String response) {
                         Toast.makeText(Add_CR.this, "Compte rendu ajouté avec succès!", Toast.LENGTH_SHORT).show();
-                        // Optionally, you can navigate back to the previous activity or clear input fields
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // Handle error
-                Toast.makeText(Add_CR.this, "Une erreur s'est produite lors de l'ajout du compte rendu.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Add_CR.this, "Erreur lors de l'ajout du compte rendu: " + error.toString(), Toast.LENGTH_LONG).show();
             }
-        });
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_user", userId);
+                params.put("date_de_la_visite", dateVisite);
+                params.put("date_de_contre_visite", dateContreVisite);
+                params.put("motif_de_la_visite", motifVisite);
+                params.put("remarques", remarque);
+                params.put("nom_du_praticien", practicien);
+                params.put("produit", produit);
+                params.put("refus", String.valueOf(isRefused ? 1 : 0));
+                params.put("quantite_distribuee", quantite);
+                return params;
+            }
+        };
 
-        // Add the request to the RequestQueue
-        queue.add(jsonObjectRequest);
+        queue.add(stringRequest);
     }
+
 }

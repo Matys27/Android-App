@@ -138,10 +138,12 @@
                     android:layout_height="wrap_content"
                     android:text="Quantité distribuée:"
                     android:textSize="20dp"/>
+
                 <EditText
                     android:id="@+id/editTextQuantite"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
+
                 <Button
                     android:id="@+id/buttonEnregistrer"
                     android:layout_width="match_parent"
@@ -150,9 +152,15 @@
                     android:backgroundTint="#5bb4a9"
                     android:textColor="#FFF"/>
 
-                <Space
+                <Button
+                    android:id="@+id/buttonRetour"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="#c56752"
+                    android:text="Retour à l'accueil"
+                    android:textColor="#FFF" />
+
             </LinearLayout>
 
         </ScrollView>

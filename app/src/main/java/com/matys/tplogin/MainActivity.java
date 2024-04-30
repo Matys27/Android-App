@@ -1,17 +1,18 @@
 package com.matys.tplogin;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,12 +25,7 @@ public class MainActivity extends AppCompatActivity {
     RequestQueue requestQueue;
 
     private static final String LOGIN_URL = "https://gsbcr.alwaysdata.net/Api/loginAPI.php";
-    private static final String CR_URL = "https://gsbcr.alwaysdata.net/Api/AfficheCRApi.php";
-    private static final String CR_LIST = "cr_list";
-    private static final String STATUS = "status";
-    private static final int SUCCESS_STATUS = 200;
-
-    public static final String EXTRA_MESSAGE = "com.example.myapplication.extra.MESSAGE";
+    public static final String EXTRA_MESSAGE = "com.matys.tplogin.extra.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +52,18 @@ public class MainActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_URL,
                 response -> {
                     try {
-                        if (response != null && !response.trim().isEmpty()) {
-                            JSONObject jsonObject = new JSONObject(response.trim());
-                            if (jsonObject.has(STATUS) && jsonObject.getInt(STATUS) == SUCCESS_STATUS) {
-                                Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
-                                String message = jsonObject.toString();
-                                intent.putExtra(EXTRA_MESSAGE, message);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(MainActivity.this, "Incorrect username or password", Toast.LENGTH_LONG).show();
-                            }
+                        JSONObject jsonObject = new JSONObject(response.trim());
+                        if (jsonObject.getInt("status") == 200) {
+                            SharedPreferencesManager prefsManager = new SharedPreferencesManager(getApplicationContext());
+                            prefsManager.saveUserId(jsonObject.getString("id_user"));
+                            prefsManager.saveToken(jsonObject.getString("token"));
+
+                            Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
+                            intent.putExtra(EXTRA_MESSAGE, jsonObject.toString());
+                            startActivity(intent);
                         } else {
-                            Toast.makeText(MainActivity.this, "Empty server response", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Incorrect username or password", Toast.LENGTH_LONG).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -89,4 +84,3 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 }
-
