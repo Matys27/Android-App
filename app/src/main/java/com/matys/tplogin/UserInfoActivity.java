@@ -109,45 +109,44 @@ public class UserInfoActivity extends AppCompatActivity {
             if (status == 200) {
                 JSONArray comptesRendusArray = jsonResponse.getJSONArray("comptesRendus");
                 List<JSONObject> comptesRendusJsonList = new ArrayList<>();
-                if (comptesRendusArray.length() > 0) {
-                    for (int i = 0; i < comptesRendusArray.length(); i++) {
-                        comptesRendusJsonList.add(comptesRendusArray.getJSONObject(i));
-                    }
-                    Collections.sort(comptesRendusJsonList, new Comparator<JSONObject>() {
-                        @Override
-                        public int compare(JSONObject cr1, JSONObject cr2) {
-                            try {
-                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                                Date date1 = format.parse(cr1.getString("date_de_contre_visite"));
-                                Date date2 = format.parse(cr2.getString("date_de_contre_visite"));
-                                return date1.compareTo(date2);
-                            } catch (JSONException | ParseException e) {
-                                e.printStackTrace();
-                                return 0;
-                            }
-                        }
-                    });
-                    List<String> formattedComptesRendus = new ArrayList<>();
-                    for (JSONObject compteRendu : comptesRendusJsonList) {
-                        String displayText = String.format("ID CR CP : %s\nDate de la visite : %s\nDate de contre-visite : %s\nMotif de la visite : %s\nNom du praticien : %s\nProduit : %s\nRefus : %s\nQuantité distribuée : %s\nRemarques : %s\n\n",
-                                compteRendu.getString("id_cr_cp"),
-                                compteRendu.getString("date_de_la_visite"),
-                                compteRendu.getString("date_de_contre_visite"),
-                                compteRendu.getString("motif_de_la_visite"),
-                                compteRendu.getString("nom_du_praticien"),
-                                compteRendu.getString("produit"),
-                                compteRendu.getString("refus"),
-                                compteRendu.getString("quantite_distribuee"),
-                                compteRendu.getString("remarques"));
-                        formattedComptesRendus.add(displayText);
-                    }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, formattedComptesRendus);
-                    listViewComptesRendus.setAdapter(adapter);
-                } else {
-                    comptesRendusList.add("Aucun compte rendu disponible pour cet utilisateur.");
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, comptesRendusList);
-                    listViewComptesRendus.setAdapter(adapter);
+                for (int i = 0; i < comptesRendusArray.length(); i++) {
+                    comptesRendusJsonList.add(comptesRendusArray.getJSONObject(i));
                 }
+                final Date today = new Date(); // La date d'aujourd'hui
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                Collections.sort(comptesRendusJsonList, new Comparator<JSONObject>() {
+                    @Override
+                    public int compare(JSONObject cr1, JSONObject cr2) {
+                        try {
+                            Date date1 = format.parse(cr1.getString("date_de_contre_visite"));
+                            Date date2 = format.parse(cr2.getString("date_de_contre_visite"));
+                            // Calcul de la différence en termes de valeur absolue des jours
+                            long diff1 = Math.abs(date1.getTime() - today.getTime());
+                            long diff2 = Math.abs(date2.getTime() - today.getTime());
+                            return Long.compare(diff1, diff2);
+                        } catch (JSONException | ParseException e) {
+                            e.printStackTrace();
+                            return 0;
+                        }
+                    }
+                });
+                List<String> formattedComptesRendus = new ArrayList<>();
+                for (JSONObject compteRendu : comptesRendusJsonList) {
+                    String displayText = String.format("ID CR CP : %s\nDate de la visite : %s\nDate de contre-visite : %s\nMotif de la visite : %s\nNom du praticien : %s\nProduit : %s\nRefus : %s\nQuantité distribuée : %s\nRemarques : %s\n\n",
+                            compteRendu.getString("id_cr_cp"),
+                            compteRendu.getString("date_de_la_visite"),
+                            compteRendu.getString("date_de_contre_visite"),
+                            compteRendu.getString("motif_de_la_visite"),
+                            compteRendu.getString("nom_du_praticien"),
+                            compteRendu.getString("produit"),
+                            compteRendu.getString("refus"),
+                            compteRendu.getString("quantite_distribuee"),
+                            compteRendu.getString("remarques"));
+                    formattedComptesRendus.add(displayText);
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, formattedComptesRendus);
+                listViewComptesRendus.setAdapter(adapter);
             } else {
                 String errorMessage = jsonResponse.getString("message");
                 Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
