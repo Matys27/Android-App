@@ -32,4 +32,7 @@ public class SharedPreferencesManager {
     public void clearAll() {
         sharedPreferences.edit().clear().apply();
     }
+
+    public void clearSession() {
+    }
 }
