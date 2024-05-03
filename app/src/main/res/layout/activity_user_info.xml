@@ -63,21 +63,23 @@
 
     <ListView
         android:id="@+id/listViewComptesRendus"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_width="395dp"
+        android:layout_height="355dp"
         android:layout_below="@id/userInfoLayout"
         android:layout_marginTop="16dp"
         android:background="@android:color/white"
-        android:nestedScrollingEnabled="true"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="0.5dp"
-        android:elevation="4dp" />
+        android:elevation="4dp"
+        android:nestedScrollingEnabled="true" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="379dp"
+        android:layout_height="68dp"
         android:layout_below="@id/listViewComptesRendus"
-        android:layout_marginTop="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="0dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -85,21 +87,21 @@
             android:id="@+id/Ajouter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:backgroundTint="#5bb4a9"
-            android:text="Ajouter"
-            android:textColor="#ffffff"
             android:elevation="4dp"
-            android:layout_margin="8dp"/>
+            android:text="Ajouter"
+            android:textColor="#ffffff" />
 
         <Button
             android:id="@+id/Deconnexion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:backgroundTint="#5bb4a9"
-            android:text="Deconnexion"
-            android:textColor="#ffffff"
             android:elevation="4dp"
-            android:layout_margin="8dp"/>
+            android:text="Deconnexion"
+            android:textColor="#ffffff" />
 
     </LinearLayout>
 
